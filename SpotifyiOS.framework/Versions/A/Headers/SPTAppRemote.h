@@ -47,7 +47,20 @@ typedef NS_ENUM(NSUInteger, SPTAppRemoteLogLevel) {
  *  @param appRemote The App Remote that failed to connect.
  *  @param error     The error that occurred.
  */
-- (void)appRemote:(SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error;
+- (void)appRemote:(SPTAppRemote *)appRemote didFailConnectionAttemptWithError:(nullable NSError *)error{
+    [self performSelector:@selector(connect2Spotify) withObject:self afterDelay:3.0];
+};
+
+-(void)connect2Spotify
+{
+    if (self.appRemote!=nil)
+    {
+        if (!self.appRemote.connected){
+            self.appRemote.connectionParameters.accessToken = self.token;
+            [self.appRemote connect];
+        }
+    }
+};
 
 /**
  *  Called when the App Remote has disconnected.
